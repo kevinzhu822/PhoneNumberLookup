@@ -13,19 +13,23 @@ This API listens for GET requests at http://127.0.0.1:3000/v1/phone-numbers and 
 
 1. First clone the Github repository:
 
-`git clone https://github.com/kevinzhu822/PhoneNumberLookup`
+```
+git clone https://github.com/kevinzhu822/PhoneNumberLookup
+```
 
 2. Navigate into the repository folder
 
-`cd PhoneNumberLookup`
+```
+cd PhoneNumberLookup
+```
 
 3. Start the server
 
-`npm start`
+```
+npm start
+```
 
-  
-
-If you see the message `Phone Number Lookup API running at http://127.0.0.1:3000/v1/phone-numbers` displayed, this means the server is running!
+If you see the message `Phone Number Lookup API running at http://127.0.0.1:3000/v1/phone-numbers` displayed, the server is running!
 
   
 
@@ -128,7 +132,7 @@ Response:
 
   
 
-In both cases, the `phoneNumber` field (and `countryCode` if provided) will be included in the response object with the original input value provided by the user.
+In both cases, the `phoneNumber` field (and `countryCode` if provided) will be included in the response object with the original input value(s) provided by the user.
 
   
   

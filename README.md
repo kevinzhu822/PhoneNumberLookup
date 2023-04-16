@@ -31,6 +31,12 @@ npm start
 
 If you see the message `Phone Number Lookup API running at http://127.0.0.1:3000/v1/phone-numbers` displayed, the server is running!
 
+
+### Testing
+To run the included test suite, run the following command:
+```
+npm test
+```
   
 
 ## Parameters

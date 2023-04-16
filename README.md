@@ -13,17 +13,13 @@ This API listens for GET requests at http://127.0.0.1:3000/v1/phone-numbers and 
 
 1. First clone the Github repository:
 
-`git clone <repo url`
+`git clone https://github.com/kevinzhu822/PhoneNumberLookup`
 
 2. Navigate into the repository folder
 
 `cd PhoneNumberLookup`
 
-3. Install dependencies
-
-`npm install`
-
-4. Start the server
+3. Start the server
 
 `npm start`
 

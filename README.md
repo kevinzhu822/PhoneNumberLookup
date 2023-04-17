@@ -194,7 +194,7 @@ However, one drawback of Elastic Beanstalk is that it abstracts away some of the
 
 **Improvement 1: Add Features and Supported Phone Number Types**
 
-- Returning additional information about the phone number such as its specific geographic region (ex. 415 area code -> California) and supporting special 3-digit numbers like 911 and 511 would definitely enhance the usefulness and versatility of the API. These additional features could provide valuable information to users and make the API more useful.
+Returning additional information about the phone number such as its specific geographic region (ex. 415 area code -> California) and supporting special 3-digit numbers like 911 and 511 would definitely enhance the usefulness and versatility of the API. These additional features could provide valuable information to users and make the API more useful.
 
   
 

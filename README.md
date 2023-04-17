@@ -10,20 +10,24 @@ This API listens for GET requests at http://127.0.0.1:3000/v1/phone-numbers and 
   
 
 ## Setup
-
-1. First clone the Github repository:
+### Installation and Running
+1. Install Node.js: 
+	- Download link can be found [here](https://nodejs.org/en/download)
+	- Alternatively you can use a package manager listed [here](https://nodejs.dev/en/download/package-manager/)
+		- eg. `brew install node`
+2. Clone the Github repository:
 
 ```
 git clone https://github.com/kevinzhu822/PhoneNumberLookup
 ```
 
-2. Navigate into the repository folder
+3. Navigate into the repository folder
 
 ```
 cd PhoneNumberLookup
 ```
 
-3. Start the server
+4. Start the server
 
 ```
 npm start

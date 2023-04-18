@@ -6,7 +6,10 @@ function getPhoneNumber(req, res) {
 
   // ensure phoneNumber was provided and of correct type
   if (phoneNumber === undefined) return missingInputHandler(res, null, "phoneNumber");
-  if (typeof phoneNumber !== 'string') return invalidInputHandler(res, phoneNumber, null, "phoneNumber");
+  if (typeof phoneNumber !== 'string') {
+      if (countryCode === undefined) return invalidInputHandler(res, phoneNumber, null, "phoneNumber");
+      else return invalidInputHandler(res, phoneNumber, countryCode, "phoneNumber");
+  }
   
   const cleanedPhoneNumber = validateAndCleanPhoneNumber(phoneNumber);
   if (!cleanedPhoneNumber) {

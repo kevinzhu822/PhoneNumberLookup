@@ -15,6 +15,9 @@ app.get("/v1/phone-numbers", getPhoneNumber)
 
 app.listen(port, hostname, () => {
   console.log(`Phone Number Lookup API running at http://${hostname}:${port}/v1/phone-numbers`);
+  console.log("\n\n");
+
+  console.log("Here's an example API request to get you started: http://127.0.0.1:3000/v1/phone-numbers?phoneNumber=16573310806");
 });
 
 

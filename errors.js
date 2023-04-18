@@ -5,21 +5,21 @@
  
  Upon all errors, a JSON object is returned to the user
 
-Error 3)
-{
-    "error" : {
-        "phoneNumber" : "required value is missing"
-    }
-}
- */
-
 
 /* Handles Error 1)
 Sends JSON object to user:
     {
-        "phoneNumber" : <user inputted phone number>
+        "phoneNumber" : <user input phone number>,
         "error" : {
-            "phoneNumber" : "invalid"
+            "phoneNumber" : "invalid input"
+        }
+
+        or 
+
+        "phoneNumber" : <user input phone number>,
+        "countryCode": <user input country code>,
+        "error" : {
+            "phoneNumber" : "invalid input"
         }
     }
 */

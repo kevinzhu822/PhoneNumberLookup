@@ -15,7 +15,8 @@ This API listens for GET requests at http://127.0.0.1:3000/v1/phone-numbers and 
 	- Download link can be found [here](https://nodejs.org/en/download)
 	- Alternatively you can use a package manager listed [here](https://nodejs.dev/en/download/package-manager/)
 		- eg. `brew install node`
-2. Clone the Github repository:
+
+2. Clone the Github repository
 
 ```
 git clone https://github.com/kevinzhu822/PhoneNumberLookup
@@ -122,7 +123,7 @@ Response:
 
 ```
 
-### Invalid Value Error
+#### Invalid Value Error
 
 If a parameter is present but invalid, the error response will include an `error` object with a key-value pair that indicates which parameter is invalid. 
 

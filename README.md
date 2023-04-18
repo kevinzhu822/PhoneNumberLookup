@@ -123,7 +123,7 @@ Response:
 
 ```
 
-### Invalid Value Error
+#### Invalid Value Error
 
 If a parameter is present but invalid, the error response will include an `error` object with a key-value pair that indicates which parameter is invalid. 
 

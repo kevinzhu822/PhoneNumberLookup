@@ -37,13 +37,14 @@ describe('Unit Tests', function () {
     it('isValidPhoneNumber should return true for a valid phone number', () => {
         assert.strictEqual(isValidPhoneNumber('12125690123'), true);
     });
+    
     it('isValidPhoneNumber should return false for an invalid phone number', () => {
         assert.strictEqual(isValidPhoneNumber('aa12312412344'), false);
     });
 
     // getNumericCountryCode
     it('getNumericCountryCode should return numeric country code for valid input', () => {
-        assert.strictEqual(getNumericCountryCode('US'), 1);
+        assert.strictEqual(getNumericCountryCode('US'), "1");
     });
 
     it('getNumericCountryCode should return null for invalid input', () => {
@@ -150,7 +151,7 @@ describe ('Integration Tests', function() {
         assert.strictEqual(result.localPhoneNumber, '3310806');
     });
 
-    it('getPhoneNumber should return error response for a valid incomplete phone number', () => {
+    it('getPhoneNumber should return valid JSON for a valid incomplete phone number', () => {
         const mockRes = new Res();
         const mockReq = new Req({phoneNumber:'6573310806', countryCode:'US'});
         const result = getPhoneNumber(mockReq, mockRes)
@@ -159,6 +160,17 @@ describe ('Integration Tests', function() {
         assert.strictEqual(result.countryCode, 'US');
         assert.strictEqual(result.areaCode, '657');
         assert.strictEqual(result.localPhoneNumber, '3310806');
+    });
+
+    it('getPhoneNumber should return valid JSON for a valid incomplete phone number 2', () => {
+        const mockRes = new Res();
+        const mockReq = new Req({phoneNumber:'+6043288827', countryCode:'CA'});
+        const result = getPhoneNumber(mockReq, mockRes)
+
+        assert.strictEqual(result.phoneNumber, '+16043288827');
+        assert.strictEqual(result.countryCode, 'CA');
+        assert.strictEqual(result.areaCode, '604');
+        assert.strictEqual(result.localPhoneNumber, '3288827');
     });
 
     it('getPhoneNumber should return error response for a invalid incomplete phone number', () => {
@@ -181,10 +193,21 @@ describe ('Integration Tests', function() {
 
     it('getPhoneNumber should return error response for a invalid complete phone number 2', () => {
         const mockRes = new Res();
-        const mockReq = new Req({phoneNumber:'1a2b3c4d5e'});
+        const mockReq = new Req({phoneNumber:'1a2b3c4d5e', countryCode: 'US'});
         const result = getPhoneNumber(mockReq, mockRes)
 
         assert.strictEqual(result.phoneNumber, '1a2b3c4d5e');
+        assert.strictEqual(result.countryCode, 'US');
+        assert.strictEqual(result.error.phoneNumber, 'invalid input');
+    });
+
+    it('getPhoneNumber should return error response for a invalid complete phone number 3', () => {
+        const mockRes = new Res();
+        const mockReq = new Req({phoneNumber: ['1a2b3c4d5e', '911']});
+        const result = getPhoneNumber(mockReq, mockRes)
+
+        assert.strictEqual(result.phoneNumber[0], '1a2b3c4d5e');
+        assert.strictEqual(result.phoneNumber[1], '911');
         assert.strictEqual(result.error.phoneNumber, 'invalid input');
     });
 });

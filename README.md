@@ -241,3 +241,7 @@ This is because including the `node_modules` folder in the source code that is u
   
 
 To avoid this issue, I would include `node_modules` in the `.gitignore` file and let AWS handle the installation of dependencies during deployment. AWS provides different methods for handling dependencies, such as using an `npm install` command during deployment. By using that technique, AWS can cache dependencies across deployments and help us reduce cold start times for this API.
+
+**Improvement 5: Use a robust mocking/stubbing framework like `Sinon` for testing.**
+
+While I created simple stub objects directly for this project to minimize the number of dependencies and keep it relatively simple, using a more powerful testing framework like `Sinon` would make it much easier to create test doubles, especially for more complex test cases. With `Sinon`, we could easily create and manipulate stubs, spies, and mocks for our tests, as well as use its features for testing asynchronous code. This would make our test suite more robust, reliable, and maintainable over time.

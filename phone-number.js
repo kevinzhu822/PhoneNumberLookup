@@ -34,10 +34,11 @@ function getPhoneNumber(req, res) {
 
   if (phoneNumberLookupResultWithCountryCode.valid) {
     // validate that provided countryCode is the same as awesome-phonenumber provided one
-    if (phoneNumberLookupResultWithCountryCode.regionCode != countryCode) return invalidInputHandler(res, phoneNumber, null, "countryCode");
+    // mainly handles the US/CA case since both countries use +1
+    if (phoneNumberLookupResultWithCountryCode.regionCode !== countryCode) return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
     return successfulLookupHandler(res, phoneNumber, countryCode, phoneNumberLookupResultWithCountryCode);
   } else {
-    return invalidInputHandler(res, phoneNumber, null,"phoneNumber");   
+    return invalidInputHandler(res, phoneNumber, countryCode, "phoneNumber");   
   } 
 }
 
@@ -94,7 +95,8 @@ function isSpacePlacementValid(inputPhoneNumber, countryCode, areaCode, localPho
 }
 
 
-// *Validates and Cleans Phone Number input*
+// Validates and Cleans Phone Number input
+//
 // Removes starting "+" (if present)
 // Checks if first char is space (invalid)
 // Checks number of spaces (placement will be checked later)

@@ -137,18 +137,31 @@ Response:
     "phoneNumber": "invalid input"
   }
 }
+```
+**Note**: *If a fully-qualified E.164  `phoneNumber`  is provided but an incorrect `countryCode` is also provided, an Invalid Country Code error will be returned.*
 
+Example:
+- Request: `/v1/phone-numbers?phoneNumber=16573310806&countryCode=CN` 
+	- `16573310806` is a valid US phone number
+- Response: 
+```json
+
+{
+  "phoneNumber": "16573310806",
+  "countryCode": "CN",
+  "error": {
+    "countryCode": "invalid input"
+  }
+}
 ```
 
   
-
-In both cases, the `phoneNumber` field (and `countryCode` if provided) will be included in the response object with the original input value(s) provided by the user.
-
+In all cases, the `phoneNumber` field (and `countryCode` if provided) will be included in the response object with the original input value provided by the user.
   
   
   
 
-## Q&A
+## Q & A
 
   
 

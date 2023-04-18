@@ -4,42 +4,56 @@ const { invalidInputHandler, missingInputHandler } = require("./errors");
 function getPhoneNumber(req, res) {
   const { phoneNumber, countryCode } = req.query;
 
+  // ensure phoneNumber was provided and of correct type
   if (phoneNumber === undefined) return missingInputHandler(res, null, "phoneNumber");
   if (typeof phoneNumber !== 'string') return invalidInputHandler(res, phoneNumber, null, "phoneNumber");
   
   const cleanedPhoneNumber = validateAndCleanPhoneNumber(phoneNumber);
-  if (!cleanedPhoneNumber) return invalidInputHandler(res, phoneNumber, null, "phoneNumber");
-  
-  
-  // query awesome-phonenumber without country code
-  const phoneNumberLookupResultWithoutCountryCode = parsePhoneNumber('+'+cleanedPhoneNumber);
-  if (phoneNumberLookupResultWithoutCountryCode.valid) {
-    if (countryCode && countryCode !== phoneNumberLookupResultWithoutCountryCode.regionCode) return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
-    return successfulLookupHandler(res, phoneNumber, null, phoneNumberLookupResultWithoutCountryCode);
+  if (!cleanedPhoneNumber) {
+    if (countryCode === undefined) return invalidInputHandler(res, phoneNumber, null, "phoneNumber");
+    else return invalidInputHandler(res, phoneNumber, countryCode, "phoneNumber");
   }
 
+  // countryCode was provided
+  if (countryCode !== undefined) {
+    var queryPhoneNumber = cleanedPhoneNumber;
+    if (typeof countryCode !== 'string') return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
 
-  // if execution reaches here, means the phonenumber by itself was insufficient
-  if (phoneNumber.length >= 15) return invalidInputHandler(res, phoneNumber, null, "phoneNumber"); // no space for country code even if provided 
-  if (countryCode === undefined) return missingInputHandler(res, phoneNumber, "countryCode"); // country code not provided
-  if (typeof countryCode !== 'string') return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
+    const countryCodeNumeric = getNumericCountryCode(countryCode);
 
+    // countryCode provided, but is invalid/malformed
+    if (!countryCodeNumeric) return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
 
-  // convert countryCode to number
-  const countryCodeNumeric = getNumericCountryCode(countryCode);
-  if (!countryCodeNumeric) return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
+    // if countryCode is already present within phoneNumber, remove it
+    if (cleanedPhoneNumber.startsWith(countryCodeNumeric)) {
+      queryPhoneNumber = cleanedPhoneNumber.slice(countryCodeNumeric.length, cleanedPhoneNumber.length);
+    }
 
-  // query awesome-phonenumber for countryCode + phoneNumber
-  const phoneNumberLookupResultWithCountryCode = parsePhoneNumber('+' + countryCodeNumeric + cleanedPhoneNumber);
+    // query awesome-phonenumber with countryCode (numeric) prepended
+    const phoneNumberLookupResultWithCountryCode = parsePhoneNumber('+'+countryCodeNumeric+queryPhoneNumber);
+    if (phoneNumberLookupResultWithCountryCode.valid) {
 
-  if (phoneNumberLookupResultWithCountryCode.valid) {
-    // validate that provided countryCode is the same as awesome-phonenumber provided one
-    // mainly handles the US/CA case since both countries use +1
-    if (phoneNumberLookupResultWithCountryCode.regionCode !== countryCode) return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
-    return successfulLookupHandler(res, phoneNumber, countryCode, phoneNumberLookupResultWithCountryCode);
-  } else {
-    return invalidInputHandler(res, phoneNumber, countryCode, "phoneNumber");   
+      // handles case where countryCode provided does not match countryCode returned from query
+      // this only happens for US/CA because both countries use +1
+      if (countryCode !== phoneNumberLookupResultWithCountryCode.regionCode) return invalidInputHandler(res, phoneNumber, countryCode, "countryCode");
+      return successfulLookupHandler(res, phoneNumber, null, phoneNumberLookupResultWithCountryCode);
+    } else {
+      return invalidInputHandler(res, phoneNumber, countryCode, "phoneNumber");
+    }
   } 
+  
+  // countryCode was not provided
+  else {
+    // query awesome-phonenumber without country code
+    const phoneNumberLookupResultWithoutCountryCode = parsePhoneNumber('+'+cleanedPhoneNumber);
+    if (phoneNumberLookupResultWithoutCountryCode.valid) {
+      return successfulLookupHandler(res, phoneNumber, null, phoneNumberLookupResultWithoutCountryCode);
+    } else {
+      // phone numbers can only be <= 15 digits. If it's already at 15 digits, then there is no room for a country code
+      if (phoneNumber.length >= 15) return invalidInputHandler(res, phoneNumber, null, "phoneNumber"); 
+      return missingInputHandler(res, phoneNumber, "countryCode");
+    }
+  }
 }
 
 
@@ -122,13 +136,13 @@ function isValidPhoneNumber(phoneNumber) {
   const regex = /^[0-9]+$/;
   return regex.test(phoneNumber);
 }
-// isValidCountryCode
+
 function getNumericCountryCode(countryCode) {
   // Check if the countryCode is a valid ISO 3166-1 alpha-2 code
   const regex = /^[A-Za-z]{2}$/;
   if (!regex.test(countryCode)) return null;
   const countryCodeNumeric = getCountryCodeForRegionCode(countryCode)
-  return countryCodeNumeric ? countryCodeNumeric : null;
+  return countryCodeNumeric ? countryCodeNumeric.toString() : null;
 }
 
 function countSpaces(str) {
